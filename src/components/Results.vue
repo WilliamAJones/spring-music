@@ -1,13 +1,15 @@
 <template>
-    <div class="results row d-flex justify-content-around">
-        <div class="col-4 yellow">
-            <h1>Results</h1>
-            <ol>
-                <li v-for="movie in results" v-if="movie.vote_average" @click='setActiveMovie(movie)'>{{movie.title}} :
-                    {{movie.vote_average}}</li>
-            </ol>
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <details-view :song='activeSong'></details-view>
         </div>
-        <details-view :movie='activeMovie' :someData="'here'"></details-view>
+        <div class="col-sm-12 card col-3 mx-3" v-for="song in results" v-if="song.kind == 'song'" @click='setActiveSong(song)'>
+            {{song.trackName}}
+            <br>
+            <img :src="song.artworkUrl100">
+        </div>
+
+
     </div>
 </template>
 
@@ -17,21 +19,21 @@
         name: '',
         data() {
             return {
-                activeMovie: {}
+                activeSong: {}
             }
         },
         computed: {
             results() {
-                let movies = this.$store.state.results
-                movies.sort((a, b) => {
-                    return b.vote_average - a.vote_average
-                })
-                return movies
+                let songs = this.$store.state.results
+
+                return songs
             }
         },
         methods: {
-            setActiveMovie(movie) {
-                this.activeMovie = movie
+            setActiveSong(song) {
+                let activeSong = this.song
+                // dispatch song to state 
+                this.$store.dispatch('setActiveSong', song)
             }
         },
         components: {
@@ -42,7 +44,28 @@
 </script>
 
 <style>
-    .yellow {
-        background-color: yellow
+  
+.card {
+        background-color: transparent;
+        display: flex;
+        align-items: center !important;
+        text-shadow: -1px -1px gray;
+        color: rgba(255, 0, 0, 0.068);
+        border-top-color: rgba(255, 0, 0, 0.829);
+        border-right-color: rgba(255, 0, 0, 0.829);
+        border-right-style: solid;
+        border-top-style: solid;
+        padding-top: 20px;
+        padding-bottom: 30px;
+        /* margin-top:10px;
+        margin-left:10px;
+        margin-right:10px; */
+        font-family: 'Finger Paint', cursive;
+        max-width: 22vw;
     }
+    img{
+    max-height: 100vh;
+    max-width: 100vw;
+    border-radius: 25%;
+}
 </style>
